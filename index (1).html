@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PolySFX — Roblox Sound ID Finder</title>
+  <meta name="description" content="Search free Roblox sound effects and music, copy the asset ID in one tap. Works with AI assistants over MCP.">
+  <meta name="theme-color" content="#0b0d1c">
+  <meta property="og:title" content="PolySFX — Roblox Sound ID Finder">
+  <meta property="og:description" content="Search free Roblox sound effects and copy IDs instantly.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg" aria-hidden="true"><canvas id="poly-bg"></canvas></div>
+  <div class="gems" aria-hidden="true">
+    <svg class="gem g1" viewBox="0 0 100 100"><polygon points="50,2 95,30 80,92 20,92 5,30" fill="#7c5cff"/><polygon points="50,2 95,30 50,45" fill="#9d85ff"/><polygon points="50,2 5,30 50,45" fill="#6a48f0"/><polygon points="5,30 20,92 50,45" fill="#5235d6"/><polygon points="95,30 80,92 50,45" fill="#8a70ff"/><polygon points="20,92 80,92 50,45" fill="#4429b8"/></svg>
+    <svg class="gem g2" viewBox="0 0 100 100"><polygon points="50,0 100,50 50,100 0,50" fill="#29d3b0"/><polygon points="50,0 100,50 50,50" fill="#5cf0cf"/><polygon points="50,0 0,50 50,50" fill="#21b897"/><polygon points="0,50 50,100 50,50" fill="#178f76"/></svg>
+    <svg class="gem g3" viewBox="0 0 100 100"><polygon points="50,4 96,96 4,96" fill="#ff5d8f"/><polygon points="50,4 96,96 50,66" fill="#ff86aa"/><polygon points="50,4 4,96 50,66" fill="#e2416f"/></svg>
+  </div>
+
+  <header class="top">
+    <a class="brand" href="/" aria-label="PolySFX home">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><polygon points="32,2 60,18 60,46 32,62 4,46 4,18" fill="#4ef0c4"/><polygon points="32,2 60,18 32,32" fill="#8bffe0"/><polygon points="32,2 4,18 32,32" fill="#3fd6ad"/><polygon points="4,18 4,46 32,32" fill="#2fb592"/><polygon points="60,18 60,46 32,32" fill="#5ff7d0"/><polygon points="4,46 32,62 32,32" fill="#238d72"/><polygon points="60,46 32,62 32,32" fill="#2aa483"/></svg>
+      <span>Poly<b>SFX</b></span>
+    </a>
+    <a class="top-link" href="#mcp">Connect AI</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Find any <span class="hl">Roblox sound</span>.<br>Copy the ID. Done.</h1>
+      <p class="sub">Free sound effects &amp; music from the Creator Store. Tap an ID to copy.</p>
+
+      <form class="search" id="search-form" role="search">
+        <svg class="search-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3a7 7 0 1 0 4.3 12.5l5.1 5.1 1.4-1.4-5.1-5.1A7 7 0 0 0 10 3zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+        <input id="q" name="q" type="search" placeholder="punch, sword slash, whoosh…" autocomplete="off" enterkeyhint="search" aria-label="Search sounds">
+        <kbd class="hint">/</kbd>
+        <button type="submit" class="btn-go">Search</button>
+      </form>
+
+      <div class="chips" id="quick" aria-label="Quick searches">
+        <button type="button" data-q="punch">👊 punch</button>
+        <button type="button" data-q="kill">💀 kill</button>
+        <button type="button" data-q="whoosh">💨 whoosh</button>
+        <button type="button" data-q="sword slash">⚔️ sword</button>
+        <button type="button" data-q="explosion">💥 explosion</button>
+        <button type="button" data-q="coin">🪙 coin</button>
+        <button type="button" data-q="jump">⬆️ jump</button>
+        <button type="button" data-q="ui click">🖱️ click</button>
+        <button type="button" data-q="countdown beep">⏱️ countdown</button>
+        <button type="button" data-q="win">🏆 win</button>
+      </div>
+    </section>
+
+    <section class="filters" aria-label="Filters">
+      <div class="seg" role="radiogroup" aria-label="Type" id="f-type">
+        <button type="button" role="radio" aria-checked="true" data-v="">All</button>
+        <button type="button" role="radio" aria-checked="false" data-v="SoundEffect">SFX</button>
+        <button type="button" role="radio" aria-checked="false" data-v="Music">Music</button>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Length" id="f-len">
+        <button type="button" role="radio" aria-checked="true" data-v="">Any</button>
+        <button type="button" role="radio" aria-checked="false" data-v="1">≤1s</button>
+        <button type="button" role="radio" aria-checked="false" data-v="3">≤3s</button>
+        <button type="button" role="radio" aria-checked="false" data-v="10">≤10s</button>
+      </div>
+      <label class="select">
+        <span class="sr">Sort</span>
+        <select id="f-sort">
+          <option value="Relevance">Best match</option>
+          <option value="Top">Top rated</option>
+          <option value="Trending">Trending</option>
+          <option value="AudioDuration">Shortest</option>
+          <option value="CreateTime">Newest</option>
+        </select>
+      </label>
+      <label class="toggle">
+        <input type="checkbox" id="f-verified">
+        <span class="track"><span class="knob"></span></span>
+        Verified only
+      </label>
+    </section>
+
+    <p class="status" id="status" aria-live="polite"></p>
+    <section class="grid" id="results" aria-label="Results"></section>
+    <div id="sentinel" aria-hidden="true"></div>
+    <div class="more-wrap"><button type="button" class="btn-ghost" id="more" hidden>Load more</button></div>
+
+    <section class="mcp" id="mcp">
+      <div class="mcp-head">
+        <svg viewBox="0 0 64 64" class="mcp-ico" aria-hidden="true"><polygon points="32,4 60,32 32,60 4,32" fill="#7c5cff"/><polygon points="32,4 60,32 32,32" fill="#a08bff"/><polygon points="32,4 4,32 32,32" fill="#6244ee"/><polygon points="4,32 32,60 32,32" fill="#4a2fcc"/></svg>
+        <div>
+          <h2>Connect your AI</h2>
+          <p>Let Claude, Cursor or any MCP client search Roblox sounds for you.</p>
+        </div>
+      </div>
+      <div class="mcp-url">
+        <code id="mcp-url">https://…/mcp</code>
+        <button type="button" class="btn-copy" data-copy-el="mcp-url">Copy URL</button>
+      </div>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="t-claude">Claude</button>
+        <button role="tab" aria-selected="false" data-tab="t-cursor">Cursor / VS Code</button>
+        <button role="tab" aria-selected="false" data-tab="t-other">Other</button>
+      </div>
+      <div class="tab-panel" id="t-claude">
+        <ol>
+          <li>Open <b>Settings → Connectors</b>.</li>
+          <li>Click <b>Add custom connector</b>.</li>
+          <li>Paste the URL above and save.</li>
+          <li>Ask: <i>“find me a short punch sound for Roblox”</i>.</li>
+        </ol>
+      </div>
+      <div class="tab-panel" id="t-cursor" hidden>
+        <pre><code id="cursor-cfg"></code></pre>
+        <button type="button" class="btn-copy" data-copy-el="cursor-cfg">Copy config</button>
+      </div>
+      <div class="tab-panel" id="t-other" hidden>
+        <p>Transport: <b>Streamable HTTP</b>, no auth. Tool: <code>search_roblox_sounds(query, type, maxDuration, verifiedOnly, sort, limit)</code></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Not affiliated with Roblox. Sounds come from the public Creator Store.
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <template id="card-tpl">
+    <article class="card">
+      <button type="button" class="play" aria-label="Play preview">
+        <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="i-stop" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"/></svg>
+        <svg class="i-wave" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h2v4H3zm4-3h2v10H7zm4-4h2v18h-2zm4 4h2v10h-2zm4 3h2v4h-2z"/></svg>
+      </button>
+      <div class="meta">
+        <h3 class="name"></h3>
+        <p class="by"></p>
+        <p class="tags"></p>
+      </div>
+      <div class="actions">
+        <button type="button" class="id" title="Copy ID"><span class="id-num"></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h11v13h-2V5H8zM5 7h10v14H5zm2 2v10h6V9z"/></svg></button>
+        <button type="button" class="asset" title="Copy rbxassetid://">rbxassetid</button>
+        <a class="open" target="_blank" rel="noopener" title="Open in Creator Store" aria-label="Open in Creator Store"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7h-2V6.4l-9.3 9.3-1.4-1.4L17.6 5H14zM5 5h6v2H7v10h10v-4h2v6H5z"/></svg></a>
+      </div>
+    </article>
+  </template>
+
+  <script src="config.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
