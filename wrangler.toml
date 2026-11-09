@@ -1,0 +1,7 @@
+name = "rbx-sound-finder"
+main = "worker/worker.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+CACHE_TTL_SECONDS = "3600"
+SITE_URL = "https://elite-3l1t3.github.io/"
